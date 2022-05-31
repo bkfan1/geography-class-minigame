@@ -1,24 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useContext } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import GameApp from "./components/GameApp";
+import { GameProvider } from "./context/GameContext";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GameProvider>
+        <div className="App">
+          <GameApp />
+        </div>
+      </GameProvider>
+    </>
   );
 }
 
