@@ -5,9 +5,9 @@ export default function HowToPlayBox() {
   return (
     <>
       <div className="howToPlayBox">
-        <header>
+        <header onClick={() => setClicked(!clicked)}>
           <h1>How to play</h1>
-          <button onClick={() => setClicked(!clicked)}>
+          <button>
             <i
               className={clicked ? "bi bi-chevron-up" : "bi bi-chevron-down"}
             />
