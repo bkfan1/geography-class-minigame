@@ -4,7 +4,7 @@ import SilhouetteColumn from "./SilhouetteColumn";
 import Timer from "./Timer";
 
 export default function SilhouettesGridContainer() {
-  const { matchLocation, matchSilhouettesColumns } = useContext(GameContext);
+  const { matchSilhouettesColumns } = useContext(GameContext);
   return (
     <div
       style={{
