@@ -1,4 +1,6 @@
+import { useContext, useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { GameContext } from "../context/GameContext";
 import StaticFlag from "./StaticFlag";
 
 export default function SilhouetteColumn({ id, imageUrl, flag }) {
