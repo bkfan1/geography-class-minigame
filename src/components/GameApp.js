@@ -53,7 +53,7 @@ export default function GameApp() {
                 <i className="bi bi-github" />
               </a>
               <a title="Send email" href="mailto:jacksonpf177@gmail.com">
-                <i className="bi bi-envelope" />
+                <i className="bi bi-envelope-fill" />
               </a>
             </ul>
           </footer>
