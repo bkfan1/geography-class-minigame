@@ -6,12 +6,13 @@ export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
   const [matchSilhouettesColumns, setMatchSilhouettesColumns] = useState([]);
-  const [matchDraggableFlags, setMatchDraggableFlags] = useState([]);
+  const [matchDraggableFlags, setMatchDraggableFlags] = useState([{id:"placeholder"}]);
   const [matchLocation, setMatchLocation] = useState("");
   const [guessedCountriesCounter, setGuessedCountriesCounter] = useState(0);
   const [failedGuessingAttempts, setFailedGuessingAttempts] = useState(0);
-  const [minutes, setMinutes] = useState(1);
-  const [seconds, setSeconds] = useState(30);
+  const [minutes, setMinutes] = useState(null);
+  const [seconds, setSeconds] = useState(null);
+
 
   const setMatch = () => {
     const randInt = Math.floor(Math.random() * levels.length);
@@ -21,12 +22,23 @@ export const GameProvider = ({ children }) => {
     let silhouettes = [],
       flags = [];
 
-    countries.forEach((country) => {
-      silhouettes.push({
-        id: country.id,
-        imageUrl: country.silhouette,
-        flag: [],
-      });
+    countries.forEach((country, index) => {
+      //if the index of the country is even, then add a clue of the country
+      if (index % 2 === 0) {
+        silhouettes.push({
+          id: country.id,
+          imageUrl: country.silhouette,
+          flag: [],
+          clue: country.clue,
+        });
+      } else {
+        silhouettes.push({
+          id: country.id,
+          imageUrl: country.silhouette,
+          flag: [],
+        });
+      }
+
       flags.push({ id: country.id, imageUrl: country.flag });
     });
 
@@ -93,7 +105,6 @@ export const GameProvider = ({ children }) => {
       setMatchDraggableFlags(newFlags);
       setMatchSilhouettesColumns(newColumns);
       setGuessedCountriesCounter(guessedCountriesCounter + 1);
-      
     }
 
     if (draggableId !== destination.droppableId) {
@@ -115,7 +126,7 @@ export const GameProvider = ({ children }) => {
         setMatchSilhouettesColumns(newColumns);
         setMatchDraggableFlags([...newFlags, removed]);
         setGuessedCountriesCounter(guessedCountriesCounter - 1);
-        setFailedGuessingAttempts(failedGuessingAttempts+1);
+        setFailedGuessingAttempts(failedGuessingAttempts + 1);
       }
     }
   };
@@ -135,6 +146,7 @@ export const GameProvider = ({ children }) => {
           setMinutes,
           seconds,
           setSeconds,
+
         }}
       >
         {children}
