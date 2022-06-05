@@ -5,75 +5,137 @@ import shuffle from "../utils/shuffleArray";
 export const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
+  const [startMatch, setStartMatch] = useState(false);
+  const [matchEnded, setMatchEnded] = useState(false);
+
+  const [currentLevel, setCurrentLevel] = useState(null);
+  const [playerWon, setPlayerWon] = useState(false);
+
   const [matchSilhouettesColumns, setMatchSilhouettesColumns] = useState([]);
-  const [matchDraggableFlags, setMatchDraggableFlags] = useState([{id:"placeholder"}]);
+  const [matchDraggableFlags, setMatchDraggableFlags] = useState([
+    { id: "placeholder" },
+  ]);
+
   const [matchLocation, setMatchLocation] = useState("");
+
   const [guessedCountriesCounter, setGuessedCountriesCounter] = useState(0);
   const [failedGuessingAttempts, setFailedGuessingAttempts] = useState(0);
+
   const [minutes, setMinutes] = useState(null);
   const [seconds, setSeconds] = useState(null);
 
+  const [error, setError] = useState(null);
 
   const setMatch = () => {
-    const randInt = Math.floor(Math.random() * levels.length);
+    let randInt = Math.floor(Math.random() * levels.length);
+
+    if (matchEnded) {
+      if (currentLevel === randInt) {
+        if (currentLevel <= 0) {
+          randInt += 1;
+        } else {
+          randInt -= 1;
+        }
+      }
+    }
+
     const level = levels[randInt];
     const { location, countries } = level;
 
     let silhouettes = [],
       flags = [];
 
-    countries.forEach((country, index) => {
-      //if the index of the country is even, then add a clue of the country
-      if (index % 2 === 0) {
-        silhouettes.push({
-          id: country.id,
-          imageUrl: country.silhouette,
-          flag: [],
-          clue: country.clue,
-        });
-      } else {
-        silhouettes.push({
-          id: country.id,
-          imageUrl: country.silhouette,
-          flag: [],
-        });
-      }
+    countries.forEach((country) => {
+      silhouettes.push({
+        id: country.id,
+        name: country.name,
+
+        imageUrl: country.silhouette,
+        flag: [],
+      });
 
       flags.push({ id: country.id, imageUrl: country.flag });
     });
 
+    silhouettes = shuffle(silhouettes);
+    flags = shuffle(flags);
+
+    setMatchSilhouettesColumns(silhouettes);
+    setMatchDraggableFlags(flags);
+    setMatchLocation(location);
+
+    setPlayerWon(false);
+    setMatchEnded(false);
+    setCurrentLevel(randInt);
+
+    setGuessedCountriesCounter(0);
+    setFailedGuessingAttempts(0);
+
     setMinutes(1);
     setSeconds(30);
-
-    setMatchSilhouettesColumns(shuffle(silhouettes));
-    setMatchDraggableFlags(shuffle(flags));
-    setGuessedCountriesCounter(0);
-
-    setMatchLocation(location);
   };
 
   useEffect(() => {
-    setMatch();
-  }, []);
+    if (startMatch) {
+      setMatch();
+    }
+  }, [startMatch]);
 
   useEffect(() => {
-    let myInterval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
+    let interval;
+
+    const substractTime = (min, sec, setMin, setSec) => {
+      if (sec > 0) {
+        setSec(sec - 1);
       }
-      if (seconds === 0) {
-        if (minutes === 0 || matchDraggableFlags.length === 0) {
-          clearInterval(myInterval);
-        } else {
-          setMinutes(minutes - 1);
-          setSeconds(59);
+
+      if (sec === 0) {
+        if (min > 0) {
+          setMin(min - 1);
+          setSec(59);
         }
       }
-    }, 1000);
-    return () => {
-      clearInterval(myInterval);
     };
+
+    if (startMatch) {
+      interval = setInterval(() => {
+        if (matchEnded) {
+          clearInterval(interval);
+        } else {
+          substractTime(minutes, seconds, setMinutes, setSeconds);
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
   });
+
+  useEffect(() => {
+    if (minutes === 0 && seconds === 0) {
+      setMatchEnded(true);
+    }
+  }, [minutes, seconds]);
+
+  useEffect(() => {
+    if (matchDraggableFlags.length === 0) {
+      setMatchEnded(true);
+      setPlayerWon(true);
+    }
+
+    if (matchEnded) {
+      if (matchDraggableFlags.length === 0) {
+        setPlayerWon(true);
+      }
+    }
+  }, [matchEnded, matchDraggableFlags]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setError(null);
+    }, 4000);
+  }, [error]);
 
   const handleOnDragEnd = (result) => {
     console.log(result);
@@ -125,8 +187,13 @@ export const GameProvider = ({ children }) => {
         //console.log(newColumns)
         setMatchSilhouettesColumns(newColumns);
         setMatchDraggableFlags([...newFlags, removed]);
+
         setGuessedCountriesCounter(guessedCountriesCounter - 1);
         setFailedGuessingAttempts(failedGuessingAttempts + 1);
+
+        setError("Wrong guess!, you lose a guessed country");
+      } else {
+        setError("Wrong guess!, try again");
       }
     }
   };
@@ -135,10 +202,14 @@ export const GameProvider = ({ children }) => {
     <>
       <GameContext.Provider
         value={{
+          startMatch,
+          setMatch,
+          setStartMatch,
+          matchEnded,
+          playerWon,
           matchSilhouettesColumns,
           matchDraggableFlags,
           matchLocation,
-          setMatch,
           handleOnDragEnd,
           guessedCountriesCounter,
           failedGuessingAttempts,
@@ -146,7 +217,8 @@ export const GameProvider = ({ children }) => {
           setMinutes,
           seconds,
           setSeconds,
-
+          error,
+          setError,
         }}
       >
         {children}
