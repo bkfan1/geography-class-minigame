@@ -1,9 +1,14 @@
-# English Class Minigame
+# Geography Class Minigame
 
-A game where you must correctly match the flags to the unlabeled countries on the larger map. Each mistake made takes away a guessed flag (in case you have guessed one or more). Made with React, react-beautiful-dnd and SASS.
+A drag and drop game where you must correctly match the flags to the unlabeled countries on the larger map before time runs out. Made with React, react-beautiful-dnd and SASS.
+
+## Rules:
+- Each mistake made removes a guessed flag (in case you have guessed one or more).
+
+<img src="https://i.imgur.com/cEw1vzu.png" alt="Game preview">
 
 ## Gallery:
-Coming Soon
+https://imgur.com/a/AJQ5iR8
 
 ## Live Demo:
 https://geography-class-minigame.vercel.app/
