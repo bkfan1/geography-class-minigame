@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
   list-style: none;
-  
 }
 
 a {
@@ -38,7 +37,7 @@ main {
   }
 
   @media screen and (max-width: 660px) {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
@@ -67,6 +66,10 @@ aside {
   gap: 15px;
   height: 100%;
   padding: 0px 15px;
+  @media screen and (max-width: 660px) {
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
 }
 
 footer {
@@ -76,7 +79,9 @@ footer {
   justify-content: center;
   width: 100%;
 
-  h3{margin-bottom: 15px;}
+  h3 {
+    margin-bottom: 15px;
+  }
 
   h5 {
     margin-top: 0;
@@ -161,6 +166,21 @@ menu {
     overflow-y: scroll;
     overflow-x: scroll;
   }
+}
+
+.countryNameParagraph {
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: white;
+}
+
+.errorParagraph {
+  padding: 10px;
+  background-color: #be1a1f;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
 }
 
 .howToPlayBox {
@@ -251,14 +271,14 @@ menu {
   }
 }
 
-.warning{
+.warning {
   color: #be1a1f;
 }
 
 .playAgainBtn {
   width: 100px;
   height: 40px;
-  margin-top: 10px;
+  margin: 20px 0px;
   border: none;
   border-radius: 5px;
   color: white;
