@@ -213,6 +213,14 @@ menu {
   }
 
   background-color: #e5d09b;
+
+  @media screen and (max-width: 1024px) {
+    img{
+      display: none;
+      visibility: hidden;
+    }
+    
+  }
 }
 
 .timer {
