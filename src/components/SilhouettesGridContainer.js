@@ -4,7 +4,7 @@ import SilhouetteColumn from "./SilhouetteColumn";
 import Timer from "./Timer";
 
 export default function SilhouettesGridContainer() {
-  const { matchSilhouettesColumns } = useContext(GameContext);
+  const { matchSilhouettesColumns, error, setError } = useContext(GameContext);
   return (
     <div
       style={{
@@ -12,9 +12,13 @@ export default function SilhouettesGridContainer() {
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        textAlign: "center",
       }}
     >
+      {error ? (
+        <p onClick={() => setError(null)} className="errorParagraph">
+          <i className="bi bi-x-circle-fill" /> {error}
+        </p>
+      ) : null}
       <section className="silhouettesGridContainer">
         {matchSilhouettesColumns.map((column) => (
           <SilhouetteColumn
@@ -22,6 +26,7 @@ export default function SilhouettesGridContainer() {
             id={column.id}
             imageUrl={column.imageUrl}
             flag={column.flag}
+            countryName={column.name}
           />
         ))}
       </section>

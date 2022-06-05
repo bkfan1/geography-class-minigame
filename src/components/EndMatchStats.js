@@ -2,8 +2,14 @@ import { useContext } from "react";
 import { GameContext } from "../context/GameContext";
 
 export default function EndMatchStats() {
-  const { matchSilhouettesColumns,guessedCountriesCounter, failedGuessingAttempts } =
-    useContext(GameContext);
+  const {
+    playerWon,
+    matchSilhouettesColumns,
+    guessedCountriesCounter,
+    failedGuessingAttempts,
+    minutes,
+    seconds,
+  } = useContext(GameContext);
 
   return (
     <>
@@ -17,10 +23,19 @@ export default function EndMatchStats() {
         </div>
         <div className="individualStat">
           <h1>Failed guessing attempts:</h1>
-          <h2>
-            {failedGuessingAttempts}
-          </h2>
+          <h2>{failedGuessingAttempts}</h2>
         </div>
+
+        {playerWon ? (
+          <div className="individualStat">
+            <h1>Match duration:</h1>
+            <h2>
+              <p>
+                {minutes}m:{seconds}s
+              </p>
+            </h2>
+          </div>
+        ) : null}
       </figure>
     </>
   );

@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { GameContext } from "../context/GameContext";
 import StaticFlag from "./StaticFlag";
 
-export default function SilhouetteColumn({ id, imageUrl, flag }) {
+export default function SilhouetteColumn({ id, imageUrl, flag, countryName }) {
   return (
     <>
       <Droppable droppableId={id}>
@@ -14,11 +12,15 @@ export default function SilhouetteColumn({ id, imageUrl, flag }) {
             className="silhouetteColumn"
             style={{ backgroundImage: `url(assets/silhouettes/${imageUrl})` }}
           >
-            {flag.length === 1
-              ? flag.map((flag) => (
+            {flag.length === 1 ? (
+              <>
+                {flag.map((flag) => (
                   <StaticFlag key={flag.id} imageUrl={flag.imageUrl} />
-                ))
-              : null}
+                ))}
+
+                <p className="countryNameParagraph">{countryName}</p>
+              </>
+            ) : null}
             {provided.placeholder}
           </figure>
         )}

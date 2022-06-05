@@ -13,7 +13,7 @@ export default function DraggableFlag({ id, index, imageUrl }) {
               snapshot.isDragging ? "isDragging" : ""
             }`}
             src={`assets/flags/${imageUrl}`}
-            alt={"flag"}
+            alt={`flag-${id}`}
           />
         )}
       </Draggable>
